@@ -204,6 +204,9 @@ namespace Xceed.Wpf.AvalonDock.Layout
                 foreach (LayoutFloatingWindow element in e.NewItems)
                     element.Parent = this;
             }
+
+            RaisePropertyChanged("Children");
+            RaisePropertyChanged("ChildrenCount");
         }
         #endregion
 
@@ -258,8 +261,8 @@ namespace Xceed.Wpf.AvalonDock.Layout
                 }
             }
 
-
-
+            RaisePropertyChanged("Children");
+            RaisePropertyChanged("ChildrenCount");
         }
 
         #endregion
