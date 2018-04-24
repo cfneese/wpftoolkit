@@ -168,6 +168,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         static void WindowFocusChanging(object sender, FocusChangeEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"WindowFocusChanging  GotFocusWinHandle:{e.GotFocusWinHandle} LostFocusWinHandle:{e.LostFocusWinHandle}");
             foreach (var manager in _managers)
             {
                 var hostContainingFocusedHandle = manager.FindLogicalChildren<HwndHost>().FirstOrDefault(hw => Win32Helper.IsChild(hw.Handle, e.GotFocusWinHandle));
@@ -195,72 +196,72 @@ namespace Xceed.Wpf.AvalonDock.Controls
             }
         }
 
-        static DispatcherOperation _setFocusAsyncOperation;
+        //static DispatcherOperation _setFocusAsyncOperation;
 
-        static void WindowActivating(object sender, WindowActivateEventArgs e)
-        {
-            if (Keyboard.FocusedElement == null && 
-                _lastFocusedElement != null && 
-                _lastFocusedElement.IsAlive)
-            {
-                var elementToSetFocus = _lastFocusedElement.Target as ILayoutElement;
-                if (elementToSetFocus != null)
-                {
-                    var manager = elementToSetFocus.Root.Manager;
-                    if (manager == null)
-                        return;
+        //static void WindowActivating(object sender, WindowActivateEventArgs e)
+        //{
+        //    if (Keyboard.FocusedElement == null && 
+        //        _lastFocusedElement != null && 
+        //        _lastFocusedElement.IsAlive)
+        //    {
+        //        var elementToSetFocus = _lastFocusedElement.Target as ILayoutElement;
+        //        if (elementToSetFocus != null)
+        //        {
+        //            var manager = elementToSetFocus.Root.Manager;
+        //            if (manager == null)
+        //                return;
 
-                    IntPtr parentHwnd;
-                    if (!manager.GetParentWindowHandle(out parentHwnd))
-                        return;
+        //            IntPtr parentHwnd;
+        //            if (!manager.GetParentWindowHandle(out parentHwnd))
+        //                return;
 
-                    if (e.HwndActivating != parentHwnd)
-                        return;
+        //            if (e.HwndActivating != parentHwnd)
+        //                return;
 
-                    _setFocusAsyncOperation = Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
-                    {
-                        try
-                        {
-                            SetFocusOnLastElement(elementToSetFocus);
-                        }
-                        finally
-                        {
-                            _setFocusAsyncOperation = null;
-                        }
-                    }), DispatcherPriority.Input);
-                }
-            }
-        }
+        //            _setFocusAsyncOperation = Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+        //            {
+        //                try
+        //                {
+        //                    SetFocusOnLastElement(elementToSetFocus);
+        //                }
+        //                finally
+        //                {
+        //                    _setFocusAsyncOperation = null;
+        //                }
+        //            }), DispatcherPriority.Input);
+        //        }
+        //    }
+        //}
 
 
-        static WeakReference _lastFocusedElementBeforeEnterMenuMode = null;
-        static void InputManager_EnterMenuMode(object sender, EventArgs e)
-        {
-            if (Keyboard.FocusedElement == null)
-                return;
+        //static WeakReference _lastFocusedElementBeforeEnterMenuMode = null;
+        //static void InputManager_EnterMenuMode(object sender, EventArgs e)
+        //{
+        //    if (Keyboard.FocusedElement == null)
+        //        return;
 
-            var lastfocusDepObj = Keyboard.FocusedElement as DependencyObject;
-            if (lastfocusDepObj.FindLogicalAncestor<DockingManager>() == null)
-            {
-                _lastFocusedElementBeforeEnterMenuMode = null;
-                return;
-            }
+        //    var lastfocusDepObj = Keyboard.FocusedElement as DependencyObject;
+        //    if (lastfocusDepObj.FindLogicalAncestor<DockingManager>() == null)
+        //    {
+        //        _lastFocusedElementBeforeEnterMenuMode = null;
+        //        return;
+        //    }
 
-            _lastFocusedElementBeforeEnterMenuMode = new WeakReference(Keyboard.FocusedElement);
-        }
-        static void InputManager_LeaveMenuMode(object sender, EventArgs e)
-        {
-            if (_lastFocusedElementBeforeEnterMenuMode != null &&
-                _lastFocusedElementBeforeEnterMenuMode.IsAlive)
-            {
-                var lastFocusedInputElement = _lastFocusedElementBeforeEnterMenuMode.GetValueOrDefault<UIElement>();
-                if (lastFocusedInputElement != null)
-                {
-                    if (lastFocusedInputElement != Keyboard.Focus(lastFocusedInputElement))
-                        Debug.WriteLine("Unable to activate the element");
-                }
-            }
-        }
+        //    _lastFocusedElementBeforeEnterMenuMode = new WeakReference(Keyboard.FocusedElement);
+        //}
+        //static void InputManager_LeaveMenuMode(object sender, EventArgs e)
+        //{
+        //    if (_lastFocusedElementBeforeEnterMenuMode != null &&
+        //        _lastFocusedElementBeforeEnterMenuMode.IsAlive)
+        //    {
+        //        var lastFocusedInputElement = _lastFocusedElementBeforeEnterMenuMode.GetValueOrDefault<UIElement>();
+        //        if (lastFocusedInputElement != null)
+        //        {
+        //            if (lastFocusedInputElement != Keyboard.Focus(lastFocusedInputElement))
+        //                Debug.WriteLine("Unable to activate the element");
+        //        }
+        //    }
+        //}
 
         #endregion
 
