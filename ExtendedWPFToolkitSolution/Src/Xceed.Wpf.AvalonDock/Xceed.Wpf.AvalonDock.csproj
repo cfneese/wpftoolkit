@@ -143,8 +143,6 @@
     <Compile Include="Controls\LayoutPanelControl.cs" />
     <Compile Include="Controls\OverlayArea.cs" />
     <Compile Include="Controls\OverlayWindow.cs" />
-    <Compile Include="Controls\OverlayWindowDropTarget.cs" />
-    <Compile Include="Controls\OverlayWindowDropTargetType.cs" />
     <Compile Include="Controls\TransformExtentions.cs" />
     <Compile Include="Converters\AnchorSideToAngleConverter.cs" />
     <Compile Include="Converters\AnchorSideToOrientationConverter.cs" />
@@ -169,7 +167,6 @@
     <Compile Include="Layout\ILayoutRoot.cs" />
     <Compile Include="Controls\IOverlayWindow.cs" />
     <Compile Include="Controls\IOverlayWindowArea.cs" />
-    <Compile Include="Controls\IOverlayWindowDropTarget.cs" />
     <Compile Include="Controls\IOverlayWindowHost.cs" />
     <Compile Include="Layout\ILayoutUpdateStrategy.cs" />
     <Compile Include="Layout\LayoutAnchorable.cs" />

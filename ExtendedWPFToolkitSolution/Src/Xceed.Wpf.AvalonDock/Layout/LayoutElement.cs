@@ -34,8 +34,8 @@ namespace Xceed.Wpf.AvalonDock.Layout
 
         [NonSerialized]
         private ILayoutContainer _parent = null;
-        [NonSerialized]
-        private ILayoutRoot _root = null;
+        //[NonSerialized]
+        //private ILayoutRoot _root = null;
         [XmlIgnore]
         public ILayoutContainer Parent
         {
@@ -45,22 +45,45 @@ namespace Xceed.Wpf.AvalonDock.Layout
                 if (_parent != value)
                 {
                     ILayoutContainer oldValue = _parent;
-                    ILayoutRoot oldRoot = _root;
+                    ILayoutRoot oldRoot = Root;
                     RaisePropertyChanging("Parent");
                     OnParentChanging(oldValue, value);
                     _parent = value;
                     OnParentChanged(oldValue, value);
+                    //if (oldValue!=null) oldValue.PropertyChanged -= Parent_PropertyChanged;
+                    //if (_parent != null) _parent.PropertyChanged += Parent_PropertyChanged;
+                    //if (oldValue != null) oldValue.PropertyChanging -= Parent_PropertyChanging;
+                    //if (_parent != null) _parent.PropertyChanging += Parent_PropertyChanging; 
 
-                    _root = Root;
-                    if (oldRoot != _root)
-                        OnRootChanged(oldRoot, _root);
+                    ILayoutRoot newRoot = Root;
+                    if (oldRoot != newRoot)
+                        OnRootChanged(oldRoot, newRoot);
 
                     RaisePropertyChanged("Parent");
+
+                    System.Diagnostics.Debug.WriteLine($"{this} Parent changed {oldValue?.ToString() ?? "null" }->{value?.ToString() ?? "null" },  Root changed {oldRoot?.ToString() ?? "null" }->{newRoot?.ToString() ?? "null" }");
 
                     var root = Root as LayoutRoot;
                     if (root != null)
                         root.FireLayoutUpdated();
                 }
+            }
+        }
+
+        ILayoutRoot _oldRoot = null;
+        private void Parent_PropertyChanging(object sender, PropertyChangingEventArgs e)
+        {
+            if (e.PropertyName == "Root")
+            {
+                _oldRoot = Root;
+            }
+        }
+
+        private void Parent_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName=="Root")
+            {
+                OnRootChanged(_oldRoot, Root);
             }
         }
 
