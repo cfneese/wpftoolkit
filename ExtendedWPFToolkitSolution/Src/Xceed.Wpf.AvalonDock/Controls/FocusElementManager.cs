@@ -168,7 +168,6 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         static void WindowFocusChanging(object sender, FocusChangeEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"WindowFocusChanging  GotFocusWinHandle:{e.GotFocusWinHandle} LostFocusWinHandle:{e.LostFocusWinHandle}");
             foreach (var manager in _managers)
             {
                 var hostContainingFocusedHandle = manager.FindLogicalChildren<HwndHost>().FirstOrDefault(hw => Win32Helper.IsChild(hw.Handle, e.GotFocusWinHandle));
