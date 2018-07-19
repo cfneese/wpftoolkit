@@ -149,7 +149,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="DockingManager.cs" />
     <Compile Include="Layout\ChildrenTreeChangedEventArgs.cs" />
-    <Compile Include="Layout\Extentions.cs" />
+    <Compile Include="Layout\Extensions.cs" />
     <Compile Include="Layout\ILayoutAnchorablePane.cs" />
     <Compile Include="Layout\ILayoutContainer.cs" />
     <Compile Include="Layout\ILayoutContentSelector.cs" />
